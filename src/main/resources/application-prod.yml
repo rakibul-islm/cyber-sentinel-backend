@@ -1,0 +1,24 @@
+spring:
+  datasource: 
+    url: jdbc:oracle:thin:@localhost:1521:mypdb
+    username: orcl
+    password: *
+    driver-class-name: oracle.jdbc.OracleDriver
+    tomcat:
+      max-wait: 200000
+      max-active: 50
+      max-idle: 20
+      min-idle: 15
+  main:
+    allow-circular-references: true
+  jpa:
+    show-sql: true
+    generate-ddl: true
+    hibernate: 
+      ddl-auto: update 
+    properties: 
+      hibernate: 
+        format_sql: true
+        dialect: org.hibernate.dialect.OracleDialect
+        id: 
+          new_generator_mappings: false
