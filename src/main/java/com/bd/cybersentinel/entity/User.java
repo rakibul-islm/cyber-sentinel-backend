@@ -46,7 +46,7 @@ public class User extends SequenceIdGenerator{
 		if(Boolean.TRUE.equals(superAdmin)) roles += UserRole.ROLE_SUPER_ADMIN.name() + ',';
 		if(Boolean.TRUE.equals(systemAdmin)) roles += UserRole.ROLE_SYSTEM_ADMIN.name() + ',';
 		if(Boolean.TRUE.equals(recruiterUser)) roles += UserRole.ROLE_RECRUITER_USER.name() + ',';
-		if(Boolean.TRUE.equals(candidateUser)) roles += UserRole.ROLE_CANDIDATE_USER.name() + ',';
+		if(Boolean.TRUE.equals(candidateUser)) roles += UserRole.ROLE_REGISTERED_USER.name() + ',';
 
 		if(StringUtils.isBlank(roles)) return roles;
 
