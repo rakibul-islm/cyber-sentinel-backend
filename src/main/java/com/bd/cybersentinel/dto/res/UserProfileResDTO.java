@@ -15,6 +15,7 @@ public class UserProfileResDTO{
 		new ModelMapper().map(user, this);
 	}
 
+	private Long id;
 	private String fullName;
 	private String email;
 	private String address;

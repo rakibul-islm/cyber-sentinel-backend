@@ -150,7 +150,7 @@ public class UserServiceImpl extends AbstractBaseService<User> implements UserDe
 		}
 		
 		if(reqDto.getImageBase64() == null || StringUtils.isBlank(reqDto.getImageBase64())) {
-			exUser.setFileData(exUser.getFileData());
+			exUser.setFileData(null);
 		}else {
 			exUser.setFileData(Base64.decodeBase64(reqDto.getImageBase64()));
 		}

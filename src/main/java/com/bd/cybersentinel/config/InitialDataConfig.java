@@ -21,7 +21,7 @@ public class InitialDataConfig implements ApplicationRunner {
 	private static final String SYSTEM_ADMIN_FULL_NAME = "System Admin";
 	private static final String SYSTEM_ADMIN_EMAIL = "admin@cyber-sentinel.com";
 	private static final String SYSTEM_ADMIN_PASSWORD = "admin@2025";
-	private static final String SYSTEM_ADMIN_MOBILE = "+880 1700055511";
+	private static final String SYSTEM_ADMIN_MOBILE = "01700055511";
 	private static final String SYSTEM_ADMIN_PHONE = "55434544476";
 
 	@Autowired private UserRepo userRepo;
