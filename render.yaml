@@ -1,8 +1,10 @@
 services:
   - type: web
-    name: cyber-sentinel
-    env: java
+    name: cyber-sentinel-backend
+    env: docker
+    repo: https://github.com/rakibul-islm/cyber-sentinel-backend
     buildCommand: ./gradlew build
-    startCommand: java -jar build/libs/cyber-sentinel-0.0.1-SNAPSHOT.jar
+    startCommand: java -jar build/libs/cyber-sentinel-backend-0.0.1-SNAPSHOT.jar
+    dockerfilePath: Dockerfile
     plan: free
-    autoDeploy: true
+
