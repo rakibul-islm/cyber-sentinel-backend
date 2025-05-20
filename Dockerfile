@@ -1,10 +1,10 @@
-# Stage 1: Build
+# Build stage
 FROM gradle:8.7.0-jdk17 AS build
-COPY --chown=gradle:gradle . /app
 WORKDIR /app
-RUN gradle bootJar
+COPY --chown=gradle:gradle . .
+RUN gradle bootJar --no-daemon
 
-# Stage 2: Run
+# Run stage
 FROM eclipse-temurin:17-jre-alpine
 WORKDIR /app
 COPY --from=build /app/build/libs/*.jar app.jar
