@@ -1,9 +1,10 @@
 spring:
-  datasource: 
-    url: jdbc:oracle:thin:@localhost:1521:mypdb
-    username: orcl
-    password: *
-    driver-class-name: oracle.jdbc.OracleDriver
+  datasource:
+    url: ${DB_URL}
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+#    driver-class-name: oracle.jdbc.OracleDriver
+    driver-class-name: org.postgresql.Driver
     tomcat:
       max-wait: 200000
       max-active: 50
@@ -14,11 +15,12 @@ spring:
   jpa:
     show-sql: true
     generate-ddl: true
-    hibernate: 
-      ddl-auto: update 
-    properties: 
-      hibernate: 
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
         format_sql: true
-        dialect: org.hibernate.dialect.OracleDialect
-        id: 
+#        dialect: org.hibernate.dialect.OracleDialect
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        id:
           new_generator_mappings: false

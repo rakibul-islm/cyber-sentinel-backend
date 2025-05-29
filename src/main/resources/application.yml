@@ -14,7 +14,7 @@ spring:
     application:
       name: cyber-sentinel
   profiles:
-    active: dev
+    active: prod
   jackson: 
     serialization: 
       fail-on-empty-beans: false
