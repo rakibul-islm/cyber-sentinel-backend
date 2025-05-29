@@ -5,6 +5,8 @@ import io.micrometer.common.util.StringUtils;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import org.hibernate.annotations.JdbcType;
+import org.hibernate.type.descriptor.jdbc.BinaryJdbcType;
 
 import java.util.Date;
 
@@ -27,7 +29,7 @@ public class User extends SequenceIdGenerator{
 	private boolean locked;
 	@Temporal(TemporalType.DATE)
 	private Date expiryDate;
-	@Lob
+	@JdbcType(BinaryJdbcType.class)
     @Column(name = "filedata")
     private byte[] fileData;
 	@Transient
