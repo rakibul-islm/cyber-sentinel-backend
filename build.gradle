@@ -35,6 +35,8 @@ dependencies {
     implementation group: 'org.springframework.boot', name: 'spring-boot-starter-jdbc', version: '1.0.0.RELEASE'
     implementation group: 'com.oracle.ojdbc', name: 'ojdbc8', version: '19.3.0.0'
     implementation 'org.postgresql:postgresql:42.7.2'
+    implementation 'com.google.api-client:google-api-client:2.6.0'
+    implementation 'com.google.http-client:google-http-client-gson:1.43.3'
     runtimeOnly 'com.h2database:h2'
     // JAXB dependencies
     implementation 'javax.xml.bind:jaxb-api:2.3.1'

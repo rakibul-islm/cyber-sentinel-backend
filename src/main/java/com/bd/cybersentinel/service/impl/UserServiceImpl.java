@@ -112,6 +112,20 @@ public class UserServiceImpl extends AbstractBaseService<User> implements UserDe
 
 		User user = reqDto.getBean();
 		user.setPassword(encoder.encode(user.getPassword()));
+
+		user = createNormalUser(getSignUpUserProperties(user));
+		if(user == null) return getErrorResponse("Can't save user");
+
+		return getSuccessResponse("User saved successfully", new UserResDTO(user));
+	}
+
+	@Transactional
+	@Override
+	public void saveGoogleUser(User reqDto) throws ServiceException{
+		createGoogleUser(getSignUpUserProperties(reqDto));
+	}
+
+	public User getSignUpUserProperties(User user) {
 		Calendar cal = Calendar.getInstance();
 		cal.add(Calendar.YEAR, 50);
 		user.setExpiryDate(cal.getTime());
@@ -121,11 +135,7 @@ public class UserServiceImpl extends AbstractBaseService<User> implements UserDe
 		user.setRecruiterUser(false);
 		user.setSuperAdmin(false);
 		user.setSystemAdmin(false);
-
-		user = createNormalUser(user);
-		if(user == null) return getErrorResponse("Can't save user");
-
-		return getSuccessResponse("User saved successfully", new UserResDTO(user));
+		return user;
 	}
 
 	@Transactional

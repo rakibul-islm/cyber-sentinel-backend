@@ -11,8 +11,11 @@ import com.bd.cybersentinel.service.AuthenticationService;
 import com.bd.cybersentinel.service.exception.ServiceException;
 import com.bd.cybersentinel.util.JwtUtil;
 import com.bd.cybersentinel.util.Response;
+import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken;
+import com.google.api.client.googleapis.auth.oauth2.GoogleIdTokenVerifier;
+import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport;
+import com.google.api.client.json.gson.GsonFactory;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -20,15 +23,29 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
+import java.security.GeneralSecurityException;
+import java.util.Collections;
+
 @Service
 public class AuthenticationServiceImpl extends AbstractBaseService<User> implements AuthenticationService<AuthenticationResDTO, AuthenticationReqDTO> {
 
-	@Autowired private AuthenticationManager authenticationManager;
-	@Autowired private JwtUtil jwtUtil;
-	@Autowired private UserServiceImpl userService;
+	private final AuthenticationManager authenticationManager;
+	private final JwtUtil jwtUtil;
+	private final UserServiceImpl userService;
+	private final UserRepo userRepo;
+	final String GOOGLE_CLIENT_ID = "128093420618-9v0n7iir2b4522v9bbo0vf2q8ef2ika4.apps.googleusercontent.com";
 
-	AuthenticationServiceImpl(UserRepo userRepo){
+	AuthenticationServiceImpl(
+			UserRepo userRepo,
+			AuthenticationManager authenticationManager,
+			JwtUtil jwtUtil,
+			UserServiceImpl userService){
 		super(userRepo);
+        this.authenticationManager = authenticationManager;
+        this.jwtUtil = jwtUtil;
+        this.userService = userService;
+		this.userRepo = userRepo;
 	}
 
 	@Override
@@ -84,6 +101,40 @@ public class AuthenticationServiceImpl extends AbstractBaseService<User> impleme
 
 		AuthenticationResDTO resDto = new AuthenticationResDTO(jwt);
 		return getSuccessResponse("Token generated successfully", resDto);
+	}
+
+	@Override
+	public Response<AuthenticationResDTO> googleSignIn(String idTokenString) throws Exception {
+		GoogleIdToken idToken = verifyGoogleToken(idTokenString);
+		if (idToken == null) {
+			return getErrorResponse("Invalid Google ID Token");
+		}
+		GoogleIdToken.Payload payload = idToken.getPayload();
+		String email = payload.getEmail();
+		String name = (String) payload.get("name");
+
+		// Check if user exists or create new
+		User user = userRepo.findByEmail(email);
+		if (user == null) {
+			userService.saveGoogleUser(new User()
+					.setUsername(email)
+					.setEmail(email)
+					.setFullName(name));
+		}
+		UserDetails userDetails = userService.loadUserByUsername(email);
+		String jwt = jwtUtil.generateToken(userDetails);
+
+		AuthenticationResDTO resDto = new AuthenticationResDTO(jwt);
+		return getSuccessResponse("Google sign-in successful", resDto);
+	}
+
+	private GoogleIdToken verifyGoogleToken(String idTokenString) throws GeneralSecurityException, IOException {
+		GoogleIdTokenVerifier verifier = new GoogleIdTokenVerifier.Builder(
+				GoogleNetHttpTransport.newTrustedTransport(), GsonFactory.getDefaultInstance())
+				.setAudience(Collections.singletonList(GOOGLE_CLIENT_ID))
+				.build();
+
+		return verifier.verify(idTokenString);
 	}
 
 	@Override

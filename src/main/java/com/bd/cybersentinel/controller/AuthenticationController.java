@@ -16,6 +16,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import java.util.Map;
+
 @RestApiController
 @RequestMapping("/authenticate")
 @Tag(name = "1.0 Authentication", description = "API")
@@ -32,6 +34,13 @@ public class AuthenticationController extends AbstractBaseController<Authenticat
 	@PostMapping("/token")
 	public Response<AuthenticationResDTO> generateToken(@RequestBody AuthenticationReqDTO reqDto) throws Exception {
 		return authservice.generateToken(reqDto);
+	}
+
+	@Operation(summary = "Sign in with Google")
+	@PostMapping("/token/google")
+	public Response<AuthenticationResDTO> googleSignIn(@RequestBody Map<String, String> body) throws Exception {
+		String idTokenString = body.get("token");
+		return authservice.googleSignIn(idTokenString);
 	}
 
 	@Operation(summary = "Validate Token")

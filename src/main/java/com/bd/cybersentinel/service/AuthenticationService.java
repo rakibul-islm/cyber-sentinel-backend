@@ -11,4 +11,5 @@ public interface AuthenticationService <R, E> extends BaseService<R, E> {
 
 	Response<AuthenticationResDTO> generateToken(AuthenticationReqDTO reqDto);
 	Response<TokenValidationResDTO> validateToken(TokenValidationReqDTO reqDto);
+	Response<AuthenticationResDTO> googleSignIn(String idToken) throws Exception;
 }

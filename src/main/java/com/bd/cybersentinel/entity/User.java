@@ -5,6 +5,7 @@ import io.micrometer.common.util.StringUtils;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.experimental.Accessors;
 import org.hibernate.annotations.JdbcType;
 import org.hibernate.type.descriptor.jdbc.BinaryJdbcType;
 
@@ -14,6 +15,7 @@ import java.util.Date;
 @Entity
 @Table(name = "USER_ACCOUNT")
 @EqualsAndHashCode(callSuper = true)
+@Accessors(chain = true)
 public class User extends SequenceIdGenerator{
 
 	private String fullName;

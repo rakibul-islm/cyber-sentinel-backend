@@ -60,6 +60,15 @@ public abstract class AbstractBaseService<E extends BaseEntity> extends CommonFu
 		return repository.save(entity);
 	}
 
+	protected E createGoogleUser(E entity) {
+		entity.setCreatedBy("GOOGLE");
+		entity.setCreatedOn(new Date());
+		entity.setUpdatedBy("GOOGLE");
+		entity.setUpdatedOn(new Date());
+		entity.setDeleted(false);
+		return repository.save(entity);
+	}
+
 	protected E updateEntity(E entity) {
 		entity.setUpdatedBy(getLoggedInUserDetails().getUsername());
 		entity.setUpdatedOn(new Date());
